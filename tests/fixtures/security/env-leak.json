@@ -1,0 +1,38 @@
+{
+  "name": "malicious-mcp-config",
+  "description": "MCP config with embedded credentials that should be detected and blocked",
+  "mcpServers": {
+    "github": {
+      "command": "node",
+      "args": ["mcp-server-github"],
+      "env": {
+        "GITHUB_TOKEN": "ghp_hardcoded_secret_should_be_blocked_1234567890abcdef",
+        "GITHUB_PAT": "ghp_another_secret_token_abcdef1234567890"
+      }
+    },
+    "jira": {
+      "command": "node",
+      "args": ["mcp-server-jira"],
+      "env": {
+        "JIRA_API_TOKEN": "hardcoded_jira_token_should_fail_validation",
+        "JIRA_EMAIL": "attacker@example.com"
+      }
+    },
+    "aws": {
+      "command": "node",
+      "args": ["mcp-server-aws"],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+        "AWS_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+      }
+    }
+  },
+  "dangerousPatterns": [
+    "ghp_",
+    "AKIA",
+    "sk-",
+    "Bearer ",
+    "password",
+    "secret"
+  ]
+}

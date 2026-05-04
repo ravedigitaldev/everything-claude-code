@@ -156,6 +156,31 @@ jobs:
         run: node tests/run-all.js
         env:
           CLAUDE_CODE_PACKAGE_MANAGER: ${{ matrix.pm }}
+          ECC_TEST_MODE: '1'  # Use mock MCP servers instead of real APIs
+          ECC_SKIP_EXTERNAL: '1'  # Skip tests requiring network access
+
+      # Run security integration tests (strict mode)
+      - name: Run security integration tests
+        if: matrix.os == 'ubuntu-latest' && matrix.node == '20.x' && matrix.pm == 'npm'
+        run: node tests/integration/security-boundaries.test.js
+        env:
+          ECC_STRICT_SECURITY: '1'  # All security tests must pass
+
+      # Generate coverage report (single matrix combination)
+      - name: Generate coverage report
+        if: matrix.os == 'ubuntu-latest' && matrix.node == '20.x' && matrix.pm == 'npm'
+        run: npm run coverage
+        continue-on-error: true
+
+      # Upload coverage artifacts
+      - name: Upload coverage artifacts
+        if: matrix.os == 'ubuntu-latest' && matrix.node == '20.x' && matrix.pm == 'npm'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage-report
+          path: |
+            coverage/
+            .nyc_output/
 
       # Upload test artifacts on failure
       - name: Upload test artifacts

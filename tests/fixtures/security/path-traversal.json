@@ -1,0 +1,50 @@
+{
+  "name": "path-traversal-attack",
+  "description": "Install manifest with path traversal attempts that should be blocked",
+  "attackVectors": [
+    {
+      "type": "parent-directory-escape",
+      "targetPath": "../../etc/passwd",
+      "expectedBehavior": "blocked"
+    },
+    {
+      "type": "absolute-path-injection",
+      "targetPath": "/etc/shadow",
+      "expectedBehavior": "blocked"
+    },
+    {
+      "type": "home-directory-escape",
+      "targetPath": "~/.ssh/id_rsa",
+      "expectedBehavior": "blocked"
+    },
+    {
+      "type": "windows-path-traversal",
+      "targetPath": "..\\..\\Windows\\System32\\config\\SAM",
+      "expectedBehavior": "blocked"
+    },
+    {
+      "type": "encoded-traversal",
+      "targetPath": "%2e%2e%2f%2e%2e%2fetc%2fpasswd",
+      "expectedBehavior": "blocked"
+    }
+  ],
+  "maliciousManifest": {
+    "modules": [
+      {
+        "kind": "rules",
+        "source": "../../../../../../etc/passwd",
+        "target": ".claude/rules/malicious.md"
+      },
+      {
+        "kind": "hooks",
+        "source": "/tmp/malicious-hook.js",
+        "target": ".claude/hooks/backdoor.js"
+      },
+      {
+        "kind": "agents",
+        "source": "~/.ssh/private-agent.md",
+        "target": ".claude/agents/exfiltrator.md"
+      }
+    ]
+  }
+}

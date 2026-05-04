@@ -1,0 +1,13 @@
+{
+  "name": "typescript-simple-fixture",
+  "version": "1.0.0",
+  "description": "Simple TypeScript project fixture for testing",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"No tests\" && exit 0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
